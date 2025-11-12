@@ -2,7 +2,9 @@
 
 <details>
     <summary>Instructions</summary>
-Create a sorted list ADT that implements the Unit 3 ListInterface.java, using a doubly linked list as the underlying data structure.
+    
+Create a sorted list ADT that implements the Unit 3 *ListInterface.java*, using a doubly linked list as the underlying data structure.
+
 No changes to *ListInterface.java* are to be made.
 
 A find helper method must be implemented and used in the same manner as the find method in the List ADTs developed in class. The application level must be able to switch the search logic between a sequential search and a binary search. A third option for the search logic may be added.
