@@ -2,7 +2,7 @@
 
 <details>
     <summary>Instructions</summary>
-    
+
 Create a sorted list ADT that implements the Unit 3 *ListInterface.java*, using a doubly linked list as the underlying data structure.
 
 No changes to *ListInterface.java* are to be made.
@@ -26,3 +26,7 @@ Test cases and a test program must also be developed.
 - Test program must be consistent with the set of the test cases.
 
 </details>
+
+
+## We are group **South** 
+- Assignment is due November 19th, 2025.
