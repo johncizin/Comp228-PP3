@@ -25,5 +25,4 @@ public interface ListInterface<E> {
 	  // the first item is at index equal to zero
 	  // if the index value is out of bounds, return null
 	  
-
 }
