@@ -169,6 +169,8 @@ public class MyDoublyLinkedList<E extends Comparable<E>> implements ListInterfac
             }
         }
 
+        
+
         @Override
         public boolean hasNext() {
             return currentIndex < shuffledArray.length;
