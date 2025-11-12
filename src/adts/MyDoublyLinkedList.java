@@ -23,10 +23,18 @@ public class MyDoublyLinkedList<E extends Comparable<E>> implements ListInterfac
     private DLLNode<E> head;
     private DLLNode<E> tail;
     private int size;
+    private SearchType searchType;
 
     public MyDoublyLinkedList() {
         head = tail = null;
         size = 0;
+        searchType = SearchType.Sequential; //Defauls to sequential search
+    }
+
+    //Types of search to switch between - could work as a boolean value but this seems cleaner
+    public enum SearchType{
+        Sequential,
+        Binary
     }
 
     // --- BASIC ADD METHOD ---
