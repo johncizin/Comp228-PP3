@@ -1,3 +1,14 @@
+/*/
+Reverse Order Doubly Linked List Implementation:
+    Extends Comparable [X]
+    Implements ListInterface<E> [X]
+    Implements Iterable<E> [X]
+    
+    ** Switcing between search contexts: **
+
+
+*/
+
 package adts;
 
 import interfaces.ListInterface;
@@ -16,6 +27,12 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
         head = null;
         tail = null;
         size = 0;
+    }
+
+    // Search context: Could use String or boolean but enum is cleaner
+    public enum SearchSContext {
+        SEQUENTIAL,
+        BINARY
     }
 
     @Override
