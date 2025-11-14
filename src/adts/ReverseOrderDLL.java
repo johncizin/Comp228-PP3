@@ -5,7 +5,11 @@ Reverse Order Doubly Linked List Implementation:
     Implements Iterable<E> [X]
     
     ** Switcing between search contexts: **
+    dll.setSearchContext(SearchContext.BINARY);
+    dll.setSearchContext(SearchContext.SEQUENTIAL);
 
+    ** only added toString so I could test
+    change whatever you guys want sorry i cant make it
 
 */
 
@@ -227,7 +231,7 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
     while (low <= high) {
         int mid = (low + high) >>> 1;
 
-        // Inline nodeAt(mid)
+        // midpoint retrieval
         DLLNode<E> current;
         if (mid <= size / 2) {
             current = head;
@@ -255,7 +259,7 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
 
     return null;
 }
-
+    // iterator interface integration for descending order
     private class DescendingIterator implements Iterator<E> {
         private DLLNode<E> current = head;
 
