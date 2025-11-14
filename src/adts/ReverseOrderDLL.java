@@ -22,22 +22,23 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
     private DLLNode<E> head;
     private DLLNode<E> tail;
     private int size;
-    private SearchContext searchContext;
+    // I start with sequential search because it's the basic one we coded first in class
+    private SearchContext searchContext = SearchContext.SEQUENTIAL;
 
-    public ReverseOrderDLL() {
-        head = tail = null;
-        size = 0;
-        searchContext = SearchContext.SEQUENTIAL; // Defaults to sequential search!!
-    }
-
-    // Search context: Could use String or boolean but enum is cleaner
+    // Enum for search context types could be strings or booleans but enums are cleaner
     public enum SearchContext {
         SEQUENTIAL,
         BINARY
     }
 
-    //Public mutator for search context in app layer::
-     public void setSearchContext(SearchContext context) {
+    public ReverseOrderDLL() {
+        head = null;
+        tail = null;
+        size = 0;
+    }
+
+    //mutator for search context
+    public void setSearchContext(SearchContext context) {
         if (context != null) {
             this.searchContext = context;
         }
@@ -45,18 +46,20 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
 
     @Override
     public void add(E element) {
-        //check edge case
+        //edge case
         if (element == null) {
-            return; //could default to a value later?
+            return; //could default later?
         }
 
         DLLNode<E> newNode = new DLLNode<>(element);
         if (head == null) {
-            head = tail = newNode;
+            head = newNode;
+            tail = newNode;
             size = 1;
             return;
         }
 
+        // drop it at the front if its the biggest so far
         if (element.compareTo(head.getData()) >= 0) {
             newNode.setNext(head);
             head.setPrev(newNode);
@@ -92,12 +95,11 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
             return false;
         }
 
-        SearchResult<E> result = find(element);
-        if (!result.found) {
+        DLLNode<E> target = find(element);
+        if (target == null) {
             return false;
         }
 
-        DLLNode<E> target = result.node;
         DLLNode<E> prevNode = target.getPrev();
         DLLNode<E> nextNode = target.getNext();
 
@@ -129,11 +131,10 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
 
     @Override
     public boolean contains(E element) {
-        //edge cases
         if (element == null || size == 0) {
             return false;
         }
-        return find(element).found;
+        return find(element) != null;
     }
 
     @Override
@@ -141,8 +142,8 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
         if (element == null || size == 0) {
             return null;
         }
-        SearchResult<E> result = find(element);
-        return result.found ? result.node.getData() : null;
+        DLLNode<E> target = find(element);
+        return target != null ? target.getData() : null;
     }
 
     @Override
@@ -178,6 +179,7 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
         return new DescendingIterator();
     }
 
+    //testing purposes here:
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder("[");
@@ -193,40 +195,66 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
         return builder.toString();
     }
 
-    private SearchResult<E> find(E element) {
-        SearchResult<E> result = new SearchResult<>();
+    // helper method switches between the binary and sequential search
+    private DLLNode<E> find(E element) {
         if (element == null || size == 0) {
-            return result;
+            return null;
         }
+        // ternary: determine calls based on search context state
+        return searchContext == SearchContext.BINARY ? binarySearch(element) : sequentialSearch(element);
+    }
 
+    // sequential:
+    private DLLNode<E> sequentialSearch(E element) {
         DLLNode<E> current = head;
-        DLLNode<E> previous = null;
-        int index = 0;
-
         while (current != null) {
             int comparison = current.getData().compareTo(element);
             if (comparison == 0) {
-                result.node = current;
-                result.previous = previous;
-                result.index = index;
-                result.found = true;
-                return result;
+                return current;
             } else if (comparison < 0) {
-                return result;
+                return null;
             }
-            previous = current;
             current = current.getNext();
-            index++;
         }
-        return result;
+        return null;
     }
 
-    private static class SearchResult<E> {
-        private DLLNode<E> node;
-        private DLLNode<E> previous;
-        private int index = -1;
-        private boolean found = false;
+    // binary:
+   private DLLNode<E> binarySearch(E element) {
+    int low = 0;
+    int high = size - 1;
+
+    while (low <= high) {
+        int mid = (low + high) >>> 1;
+
+        // Inline nodeAt(mid)
+        DLLNode<E> current;
+        if (mid <= size / 2) {
+            current = head;
+            for (int i = 0; i < mid; i++) {
+                current = current.getNext();
+            }
+        } else {
+            current = tail;
+            for (int i = size - 1; i > mid; i--) {
+                current = current.getPrev();
+            }
+        }
+
+        // Compare
+        int comparison = current.getData().compareTo(element);
+
+        if (comparison == 0) {
+            return current;
+        } else if (comparison < 0) {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
     }
+
+    return null;
+}
 
     private class DescendingIterator implements Iterator<E> {
         private DLLNode<E> current = head;
@@ -238,6 +266,7 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
 
         @Override
         public E next() {
+            //edge case
             if (current == null) {
                 throw new NoSuchElementException();
             }
@@ -246,4 +275,5 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
             return data;
         }
     }
+
 }

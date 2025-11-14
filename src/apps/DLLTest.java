@@ -13,6 +13,7 @@ public class DLLTest {
         dll.add(1);
         System.out.println(dll); // Should print [8, 5, 3, 1]
 
+        
     }
 
 }
