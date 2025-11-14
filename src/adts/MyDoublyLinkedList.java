@@ -23,18 +23,10 @@ public class MyDoublyLinkedList<E extends Comparable<E>> implements ListInterfac
     private DLLNode<E> head;
     private DLLNode<E> tail;
     private int size;
-    private SearchType searchType;
 
     public MyDoublyLinkedList() {
         head = tail = null;
         size = 0;
-        searchType = SearchType.Sequential; //Defauls to sequential search
-    }
-
-    //Types of search to switch between - could work as a boolean value but this seems cleaner
-    public enum SearchType{
-        Sequential,
-        Binary
     }
 
     // --- BASIC ADD METHOD ---
@@ -48,102 +40,6 @@ public class MyDoublyLinkedList<E extends Comparable<E>> implements ListInterfac
             tail = newNode;
         }
         size++;
-    }
-
-    // --- REMOVE METHOD ---
-    @Override
-    public boolean remove(E element) {
-        if (element == null) {
-            return false;
-        }
-        
-        DLLNode<E> current = head;
-        while (current != null) {
-            if (current.getData().equals(element)) {
-                // Found the element to remove
-                DLLNode<E> prevNode = current.getPrev();
-                DLLNode<E> nextNode = current.getNext();
-                
-                if (prevNode != null) {
-                    prevNode.setNext(nextNode);
-                } else {
-                    // current is the head
-                    head = nextNode;
-                }
-                
-                if (nextNode != null) {
-                    nextNode.setPrev(prevNode);
-                } else {
-                    // current is the tail
-                    tail = prevNode;
-                }
-                
-                size--;
-                return true;
-            }
-            current = current.getNext();
-        }
-        return false;
-    }
-
-    // --- SIZE METHOD ---
-    @Override
-    public int size() {
-        return size;
-    }
-
-    // --- IS EMPTY METHOD ---
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    // --- CONTAINS METHOD ---
-    @Override
-    public boolean contains(E element) {
-        if (element == null) {
-            return false;
-        }
-        
-        DLLNode<E> current = head;
-        while (current != null) {
-            if (current.getData().equals(element)) {
-                return true;
-            }
-            current = current.getNext();
-        }
-        return false;
-    }
-
-    // --- GET METHOD (BY ELEMENT) ---
-    @Override
-    public E get(E element) {
-        if (element == null) {
-            return null;
-        }
-        
-        DLLNode<E> current = head;
-        while (current != null) {
-            if (current.getData().equals(element)) {
-                return current.getData();
-            }
-            current = current.getNext();
-        }
-        return null;
-    }
-
-    // --- GET METHOD (BY INDEX) ---
-    @Override
-    public E get(int index) {
-        if (index < 0 || index >= size) {
-            return null;
-        }
-        
-        DLLNode<E> current = head;
-        for (int i = 0; i < index; i++) {
-            current = current.getNext();
-        }
-        return current.getData();
     }
 
     // --- RANDOM ITERATOR PART  ---
@@ -176,8 +72,6 @@ public class MyDoublyLinkedList<E extends Comparable<E>> implements ListInterfac
                 shuffledArray[j] = temp;
             }
         }
-
-        
 
         @Override
         public boolean hasNext() {

@@ -22,29 +22,37 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
     private DLLNode<E> head;
     private DLLNode<E> tail;
     private int size;
+    private SearchContext searchContext;
 
     public ReverseOrderDLL() {
-        head = null;
-        tail = null;
+        head = tail = null;
         size = 0;
+        searchContext = SearchContext.SEQUENTIAL; // Defaults to sequential search!!
     }
 
     // Search context: Could use String or boolean but enum is cleaner
-    public enum SearchSContext {
+    public enum SearchContext {
         SEQUENTIAL,
         BINARY
     }
 
+    //Public mutator for search context in app layer::
+     public void setSearchContext(SearchContext context) {
+        if (context != null) {
+            this.searchContext = context;
+        }
+    }
+
     @Override
     public void add(E element) {
+        //check edge case
         if (element == null) {
-            return;
+            return; //could default to a value later?
         }
 
         DLLNode<E> newNode = new DLLNode<>(element);
         if (head == null) {
-            head = newNode;
-            tail = newNode;
+            head = tail = newNode;
             size = 1;
             return;
         }
@@ -121,6 +129,7 @@ public class ReverseOrderDLL<E extends Comparable<E>> implements ListInterface<E
 
     @Override
     public boolean contains(E element) {
+        //edge cases
         if (element == null || size == 0) {
             return false;
         }
